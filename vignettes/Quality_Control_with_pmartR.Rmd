@@ -283,7 +283,7 @@ attributes(mypepData)$data_info$data_scale
 mypepData <- edata_transform(mypepData, data_scale = "log2")
 attributes(mypepData)$data_info$data_scale
 
-plot(mypepData)
+plot(mypepData, bw_theme = TRUE)
 ```
 
 -----
@@ -475,7 +475,7 @@ div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
 
 ### 4e. IMD-ANOVA Filter 
 
-The IMD-ANOVA filter removes peptides that do not have sufficient data for the statistical tests available in the pmartR package; these are ANOVA (quantitative test) and an independence of missing data (IMD) using a g-test (qualitative test) as specified in @webb2010combined. When using the `summary()`, `plot()`, and `applyFilt()` functions, you can specify just one filter (ANOVA or IMD) or both, depending on the tests you'd like to perform later. Using this filter speeds up the process of performing the statistical tests. 
+The IMD-ANOVA filter removes peptides that do not have sufficient data for the statistical tests available in the pmartR package; these are ANOVA (quantitative test) and an independence of missing data (IMD) using a g-test (qualitative test) as specified in [@webb2010combined]. When using the `summary()`, `plot()`, and `applyFilt()` functions, you can specify just one filter (ANOVA or IMD) or both, depending on the tests you'd like to perform later. Using this filter speeds up the process of performing the statistical tests. 
 
 ```{r imdanova_filter1}
 myfilter <- imdanova_filter(mypepData)
@@ -579,7 +579,7 @@ We can see that Infection5 has the highest MAD, low skewness, and almost the low
 
 ## 6. Data summary
 
-The pmartR package contains various methods for data summarization and exploration that can be used as part of the QC process: numeric summaries and associated plots (via the `edata_summary()` function), sequential projection pursuit principal components analysis (sppPCA) for dimension reduction (via the`dim_reduction()` function), and a correlation heat map (via the `cor_result()` function)[@stacklies2007pcamethods, @sppca]. As for missing data summarization there are also functions to collect and plot missing data information. Missing data collection and plotting functions include, `missingval_result()`, `plot_missingval()`, `missingval_scatterplot()` and `missingval_heatmap()`. 
+The pmartR package contains various methods for data summarization and exploration that can be used as part of the QC process: numeric summaries and associated plots (via the `edata_summary()` function), sequential projection pursuit principal components analysis (sppPCA) for dimension reduction (via the`dim_reduction()` function), and a correlation heat map (via the `cor_result()` function) [@stacklies2007pcamethods], [@sppca]. As for missing data summarization there are also functions to collect and plot missing data information. Missing data collection and plotting functions include, `missingval_result()`, `plot_missingval()`, `missingval_scatterplot()` and `missingval_heatmap()`. 
 
 
 <br>
@@ -605,7 +605,7 @@ print(head(dfsummary))
 
 ### 6b. Probabilistic Principal Components Analysis
 
-Probabilistic is a principal components analysis (PCA) algorithm that can be used in the presence of missing data [@stacklies2007pcamethods, @sppca]. We use the `dim_reduction()` function in pmartR, specifying the dataset and the number of principal components to return (default value of 2 principal components). The `summary()` and `plot()` functions operate on the results of the `dim_reduction()` function.
+Probabilistic is a principal components analysis (PCA) algorithm that can be used in the presence of missing data [@stacklies2007pcamethods], [@sppca]. We use the `dim_reduction()` function in pmartR, specifying the dataset and the number of principal components to return (default value of 2 principal components). The `summary()` and `plot()` functions operate on the results of the `dim_reduction()` function.
 
 Note that `dim_reduction()` requires that the `group_designation()` function has been run.
 
@@ -661,7 +661,7 @@ The next step in a typical workflow is to normalize the data. Normalization can 
 
 ### 7a. Normalization methods
 
-Normalization approaches consist of a subset method and a normalization function [@aastrand2003contrast, @gautier2004affy]. Available subset methods include:
+Normalization approaches consist of a subset method and a normalization function [@aastrand2003contrast], [@gautier2004affy]. Available subset methods include:
 
 - Percentage of peptides present (PPP): Subset the data to peptides present in at least $p$ percent of samples. This subset method is specified as "ppp".
 
@@ -696,14 +696,38 @@ There are two ways to go about normalizing data in the pmartR package. If you kn
 ```{r norm2}
 
 # Normalize using all peptides and median centering #
-norm_object <- normalize_global(omicsData = mypepData, subset_fn = "all", norm_fn = "median", apply_norm = FALSE, backtransform = TRUE)
-norm_data <- normalize_global(omicsData = mypepData, subset_fn = "all", norm_fn = "median", apply_norm = TRUE, backtransform = TRUE)
-plot(norm_data, title_plot="Normalized Data: Median Centering Using all Peptides", title_size=12)
+norm_object <- normalize_global(omicsData = mypepData, 
+                                subset_fn = "all", 
+                                norm_fn = "median", 
+                                apply_norm = FALSE, 
+                                backtransform = TRUE)
+norm_data <- normalize_global(omicsData = mypepData, 
+                              subset_fn = "all", 
+                              norm_fn = "median", 
+                              apply_norm = TRUE, 
+                              backtransform = TRUE)
+plot(norm_data, 
+     title_plot="Normalized Data: Median Centering Using all Peptides", 
+     title_size=12,
+     bw_theme = TRUE)
 
 # Normalize using RIP 0.2 and median centering #
-norm_object <- normalize_global(omicsData = mypepData, subset_fn = "rip", params=list(rip=0.2), norm_fn = "median", apply_norm = FALSE, backtransform = TRUE)
-norm_data <- normalize_global(omicsData = mypepData, subset_fn = "rip", params=list(rip=0.2), norm_fn = "median", apply_norm = TRUE, backtransform = TRUE)
-plot(norm_data, title_plot="Normalized Data: Median Centering Using RIP 0.2 Peptides", title_size=12)
+norm_object <- normalize_global(omicsData = mypepData, 
+                                subset_fn = "rip", 
+                                params=list(rip=0.2), 
+                                norm_fn = "median", 
+                                apply_norm = FALSE, 
+                                backtransform = TRUE)
+norm_data <- normalize_global(omicsData = mypepData, 
+                              subset_fn = "rip", 
+                              params=list(rip=0.2), 
+                              norm_fn = "median", 
+                              apply_norm = TRUE, 
+                              backtransform = TRUE)
+plot(norm_data, 
+     title_plot="Normalized Data: Median Centering Using RIP 0.2 Peptides", 
+     title_size=12,
+     bw_theme = TRUE)
 
 ```
 
@@ -713,7 +737,7 @@ This is the same function that would be used post-SPANS if the user chooses to r
 
 ### 7c. SPANS
 
-If using proteomics data and unsure how to normalize, the `spans_procedure()` function will generate statistics the user can use to select a method. SPANS ranks different combinations of sub-setting and normalization methods based on a 'score' that captures how much bias a particular normalization procedure introduces into the data. A higher 'score' implies less bias. [@wwebb2011statistical]
+If using proteomics data and unsure how to normalize, the `spans_procedure()` function will generate statistics the user can use to select a method. SPANS ranks different combinations of sub-setting and normalization methods based on a 'score' that captures how much bias a particular normalization procedure introduces into the data. A higher 'score' implies less bias. [@webb2011statistical]
 
 SPANS tests bias for all the aforementioned sub-setting and normalization procedures by default. Default settings are used to determine the best normalization procedure for mypepData.
 
